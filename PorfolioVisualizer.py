@@ -30,7 +30,7 @@ for ticker in assets_shares.keys():
 # print(actual_prices)
 # print(total)
 
-# print(assets_shares)
+#print(assets_shares)
 
 fig = plt.figure(figsize=(9,6))
 plt.pie(total, labels=assets_shares.keys(), autopct="%1.2f%%")
