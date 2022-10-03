@@ -12,9 +12,29 @@ def popup_datatype():
     messagebox.showerror("Error", "Wrong Format in Field(s)")
 
 
-# define forward button action
-def forward():
+# define back button action
+def back():
+    pass
 
+
+# define forward button action
+def forward(result_year_entry, years_label, root, y, list_compounded_years, forward_button):
+    result_year_entry.delete(0, END)
+    years_label = Label(root, text=f"In {y} year(s) you will have", justify=CENTER, font=("Helvetica", 12),
+                        bg="#1b4d3e", fg="white")
+    # redefine forward button
+    forward_button = Button(root, text=">>", fg="white", bg="#008080",
+                            command=lambda: forward(result_year_entry, years_label, root, y + 1, list_compounded_years,
+                                                    forward_button))
+    # check if it is out of range
+    if y == len(list_compounded_years):
+        forward_button = Button(root, text=">>", state=DISABLED, fg="white", bg="#008080")
+    # place button overwritten
+    else:
+        forward_button.place(x=378, y=518)
+
+    years_label.place(x=176, y=480)
+    result_year_entry.insert(0, "%.2f" % list_compounded_years[y - 1])
 
 
 # calculate the result
@@ -30,7 +50,6 @@ def calculate(amount_entry, length_entry, interest_entry, result_entry, root, re
             length = int(length_entry.get())
             interest = float(interest_entry.get())
         except:
-                # elif not isinstance(amount, (float, int)) or not isinstance(length, int) or not isinstance(interest,(float, int)):
             popup_datatype()
             raise TypeError
         else:
@@ -57,36 +76,39 @@ def calculate(amount_entry, length_entry, interest_entry, result_entry, root, re
             list_compounded_years.append(year_amount)
             y = 1
             while y < length:
-                year_amount = list_compounded_years[y - 1] + (interest / 100) * list_compounded_years[y - 1]
+                year_amount = list_compounded_years[y - 1] + ((interest / 100) * list_compounded_years[y - 1])
                 list_compounded_years.append(year_amount)
                 y += 1
             y = 1
-
             # place label to inform number of years
-            years_label = Label(root, text=f"In {y} year(s) you will have", justify=CENTER, font=("Helvetica", 12),
+            years_label = Label(root, text=f"In {1} year you will have", justify=CENTER, font=("Helvetica", 12),
                                 bg="#1b4d3e", fg="white")
-            years_label.place(x=176, y=480)
+            years_label.place(x=173, y=480)
             # place result for year entry
             result_year_entry.place(x=171, y=520)
             # clear entry
             result_year_entry.delete(0, END)
             # place corresponding year there starting from 1 year
-            result_year_entry.insert(0, list_compounded_years[y - 1])
+            result_year_entry.insert(0, "%.2f" % list_compounded_years[y - 1])
 
             # back button to go through years
-            back_button = Button(root, text="<<", fg="white", bg="#008080")
+            back_button = Button(root, text="<<", fg="white", bg="#008080", command=lambda: back())
             back_button.place(x=115, y=518)
 
             # forward button
-            forward_button = Button(root, text=">>", fg="white", bg="#008080")
+            forward_button = Button(root, text=">>", fg="white", bg="#008080",
+                                    command=lambda: forward(result_year_entry, years_label, root, 2,
+                                                            list_compounded_years, forward_button))
             forward_button.place(x=378, y=518)
 
+
 # reset all boxes with null values
-def reset(amount_entry, length_entry, interest_entry, result_entry):
+def reset(amount_entry, length_entry, interest_entry, result_entry, result_year_entry):
     amount_entry.delete(0, END)
     length_entry.delete(0, END)
     interest_entry.delete(0, END)
     result_entry.delete(0, END)
+    result_year_entry.delete(0, END)
 
 
 # main window interface
@@ -135,15 +157,15 @@ def main_window():
 
     # calculate button
     calculate_button = Button(root, text="Calculate", font=("Helvetica", 14), bg="#008080", fg="white",
-                              command=lambda: calculate(amount_entry, length_entry, interest_entry, result_entry, root, result_year_entry))
+                              command=lambda: calculate(amount_entry, length_entry, interest_entry, result_entry, root,
+                                                        result_year_entry))
     calculate_button.place(x=175, y=315)
 
     # reset button
     reset_button = Button(root, text="Reset", font=("Helvetica", 14), bg="#ff7373", fg="white",
-                          command=lambda: reset(amount_entry, length_entry, interest_entry, result_entry))
+                          command=lambda: reset(amount_entry, length_entry, interest_entry, result_entry,
+                                                result_year_entry))
     reset_button.place(x=280, y=315)
-
-
 
     # end of window
     root.mainloop()
