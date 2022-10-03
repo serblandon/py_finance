@@ -13,25 +13,46 @@ def popup_datatype():
 
 
 # define back button action
-def back():
-    pass
-
-
-# define forward button action
-def forward(result_year_entry, years_label, root, y, list_compounded_years, forward_button):
+def back(result_year_entry, years_label, root, y, list_compounded_years):
     result_year_entry.delete(0, END)
-    years_label = Label(root, text=f"In {y} year(s) you will have", justify=CENTER, font=("Helvetica", 12),
+    years_label = Label(root, text=f"In {y} years you will have", justify=CENTER, font=("Helvetica", 12),
                         bg="#1b4d3e", fg="white")
     # redefine forward button
     forward_button = Button(root, text=">>", fg="white", bg="#008080",
-                            command=lambda: forward(result_year_entry, years_label, root, y + 1, list_compounded_years,
-                                                    forward_button))
+                            command=lambda: forward(result_year_entry, years_label, root, y + 1, list_compounded_years))
+    back_button = Button(root, text="<<", fg="white", bg="#008080",
+                            command=lambda: back(result_year_entry, years_label, root, y - 1, list_compounded_years))
+    # check if it is out of range
+    if y == 1:
+        back_button = Button(root, text="<<", state=DISABLED, fg="white", bg="#008080")
+    # place button overwritten
+    else:
+        back_button.place(x=115, y=518)
+    # place button overwritten
+    forward_button.place(x=378, y=518)
+
+    years_label.place(x=176, y=480)
+    result_year_entry.insert(0, "%.2f" % list_compounded_years[y - 1])
+
+
+# define forward button action
+def forward(result_year_entry, years_label, root, y, list_compounded_years):
+    result_year_entry.delete(0, END)
+    years_label = Label(root, text=f"In {y} years you will have", justify=CENTER, font=("Helvetica", 12),
+                        bg="#1b4d3e", fg="white")
+    # redefine forward button
+    forward_button = Button(root, text=">>", fg="white", bg="#008080",
+                            command=lambda: forward(result_year_entry, years_label, root, y + 1, list_compounded_years))
+    # redefine back button
+    back_button = Button(root, text="<<", fg="white", bg="#008080", command=lambda: back(result_year_entry, years_label, root, y - 1, list_compounded_years))
     # check if it is out of range
     if y == len(list_compounded_years):
         forward_button = Button(root, text=">>", state=DISABLED, fg="white", bg="#008080")
     # place button overwritten
     else:
         forward_button.place(x=378, y=518)
+    # place button overwritten
+    back_button.place(x=115, y=518)
 
     years_label.place(x=176, y=480)
     result_year_entry.insert(0, "%.2f" % list_compounded_years[y - 1])
@@ -81,7 +102,7 @@ def calculate(amount_entry, length_entry, interest_entry, result_entry, root, re
                 y += 1
             y = 1
             # place label to inform number of years
-            years_label = Label(root, text=f"In {1} year you will have", justify=CENTER, font=("Helvetica", 12),
+            years_label = Label(root, text=f"In {1} year you will have....", justify=CENTER, font=("Helvetica", 12),
                                 bg="#1b4d3e", fg="white")
             years_label.place(x=173, y=480)
             # place result for year entry
@@ -92,13 +113,14 @@ def calculate(amount_entry, length_entry, interest_entry, result_entry, root, re
             result_year_entry.insert(0, "%.2f" % list_compounded_years[y - 1])
 
             # back button to go through years
-            back_button = Button(root, text="<<", fg="white", bg="#008080", command=lambda: back())
+            back_button = Button(root, text="<<", fg="white", bg="#008080",
+                                    command=lambda: back(result_year_entry, years_label, root, 2, list_compounded_years, back_button))
             back_button.place(x=115, y=518)
 
             # forward button
             forward_button = Button(root, text=">>", fg="white", bg="#008080",
                                     command=lambda: forward(result_year_entry, years_label, root, 2,
-                                                            list_compounded_years, forward_button))
+                                                            list_compounded_years))
             forward_button.place(x=378, y=518)
 
 
