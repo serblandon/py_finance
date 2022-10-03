@@ -103,12 +103,15 @@ def calculate(amount_entry, length_entry, interest_entry, result_entry, root, re
 
 
 # reset all boxes with null values
-def reset(amount_entry, length_entry, interest_entry, result_entry, result_year_entry):
+def reset(amount_entry, length_entry, interest_entry, result_entry, result_year_entry, root):
     amount_entry.delete(0, END)
     length_entry.delete(0, END)
     interest_entry.delete(0, END)
     result_entry.delete(0, END)
     result_year_entry.delete(0, END)
+    years_label = Label(root, text=f"In {1} year you will have.....", justify=CENTER, font=("Helvetica", 12),
+                        bg="#1b4d3e", fg="white")
+    years_label.place(x=173, y=480)
 
 
 # main window interface
@@ -164,7 +167,7 @@ def main_window():
     # reset button
     reset_button = Button(root, text="Reset", font=("Helvetica", 14), bg="#ff7373", fg="white",
                           command=lambda: reset(amount_entry, length_entry, interest_entry, result_entry,
-                                                result_year_entry))
+                                                result_year_entry, root))
     reset_button.place(x=280, y=315)
 
     # end of window
