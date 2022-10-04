@@ -120,7 +120,7 @@ def calculate(amount_entry, length_entry, interest_entry, result_entry, root, re
 
             # back button to go through years
             back_button = Button(root, text="<<", fg="white", bg="#008080",
-                                    command=lambda: back(result_year_entry, years_label, root, 2, list_compounded_years, back_button))
+                                 command=lambda: back(result_year_entry, years_label, root, 2, list_compounded_years))
             back_button.place(x=115, y=518)
 
             # forward button
@@ -137,9 +137,10 @@ def reset(amount_entry, length_entry, interest_entry, result_entry, result_year_
     interest_entry.delete(0, END)
     result_entry.delete(0, END)
     result_year_entry.delete(0, END)
-    years_label = Label(root, text=f"In {1} year you will have.....", justify=CENTER, font=("Helvetica", 12),
-                        bg="#1b4d3e", fg="white")
-    years_label.place(x=173, y=480)
+    '''years_label = Label(root, text=f"In {1} year you will have.....", justify=CENTER, font=("Helvetica", 12),
+    #                    bg="#1b4d3e", fg="white")
+    #years_label.place(x=173, y=480)
+    #years_label.destroy()'''
 
 
 # main window interface
