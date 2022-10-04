@@ -21,7 +21,7 @@ def popup_datatype():
 # define back button action
 def back(result_year_entry, years_label, root, y, list_compounded_years):
     result_year_entry.delete(0, END)
-    years_label = Label(root, text=f"In {y} years you will have", justify=CENTER, font=("Helvetica", 12),
+    years_label = Label(root, text=f"In {y} year(s) you will have", justify=CENTER, font=("Helvetica", 12),
                         bg="#1b4d3e", fg="white")
     # redefine forward button
     forward_button = Button(root, text=">>", fg="white", bg="#008080",
@@ -44,7 +44,7 @@ def back(result_year_entry, years_label, root, y, list_compounded_years):
 # define forward button action
 def forward(result_year_entry, years_label, root, y, list_compounded_years):
     result_year_entry.delete(0, END)
-    years_label = Label(root, text=f"In {y} years you will have", justify=CENTER, font=("Helvetica", 12),
+    years_label = Label(root, text=f"In {y} year(s) you will have", justify=CENTER, font=("Helvetica", 12),
                         bg="#1b4d3e", fg="white")
     # redefine forward button
     forward_button = Button(root, text=">>", fg="white", bg="#008080",
