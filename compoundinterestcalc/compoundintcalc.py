@@ -2,6 +2,12 @@ from tkinter import *
 from tkinter import messagebox
 
 
+# def on closing function to doulecheck if u want to quit
+def on_closing(root):
+    if messagebox.askyesno(title="Quit?", message="Do you really want to quit?"):
+        root.destroy()
+
+
 # define error message for missing info
 def popup_missing():
     messagebox.showerror("Error", "Missing Data in Required Fields")
@@ -106,7 +112,7 @@ def calculate(amount_entry, length_entry, interest_entry, result_entry, root, re
                                 bg="#1b4d3e", fg="white")
             years_label.place(x=173, y=480)
             # place result for year entry
-            result_year_entry.place(x=171, y=520)
+            result_year_entry.place(x=168, y=520)
             # clear entry
             result_year_entry.delete(0, END)
             # place corresponding year there starting from 1 year
@@ -167,9 +173,9 @@ def main_window():
     length_entry.pack()
 
     # interest rate labelframe - percentage
-    interest_lbframe = LabelFrame(root, text="Estimated Interest Rate:", font=("Helvetica", 12), bg="#008080",
+    interest_lbframe = LabelFrame(root, text="Estimated Interest Rate(%):", font=("Helvetica", 12), bg="#008080",
                                   fg="white")
-    interest_lbframe.place(x=170, y=240)
+    interest_lbframe.place(x=160, y=240)
     # entry for interest rate
     interest_entry = Entry(interest_lbframe, font=("Helvetica", 10))
     interest_entry.pack()
@@ -191,6 +197,9 @@ def main_window():
                           command=lambda: reset(amount_entry, length_entry, interest_entry, result_entry,
                                                 result_year_entry, root))
     reset_button.place(x=280, y=315)
+
+    # prompt double check when closing window
+    root.protocol("WM_DELETE_WINDOW", lambda: on_closing(root))
 
     # end of window
     root.mainloop()
