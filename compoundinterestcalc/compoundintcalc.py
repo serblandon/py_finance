@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import matplotlib.pyplot as plt
 
 
 # def on closing function to doulecheck if u want to quit
@@ -64,8 +65,23 @@ def forward(result_year_entry, years_label, root, y, list_compounded_years):
     result_year_entry.insert(0, "%.2f" % list_compounded_years[y - 1])
 
 
+# def plot method
+def plot(list_compounded_years, amount):
+    # add initial amount to the list to start from the same point
+    list_compounded_years.insert(0, amount)
+    plt.plot(list_compounded_years, label="Compounded sum")
+    # create a list for the flat line representing initial sum through the years
+    list_same_value = [amount for x in list_compounded_years]
+    plt.plot(list_same_value, label="Initial sum")
+    plt.title("Your initial sum compounded")
+    plt.xlabel("$Years$")
+    plt.ylabel("$Amount$")
+    plt.legend(loc="upper left")
+    plt.show()
+
+
 # calculate the result
-def calculate(amount_entry, length_entry, interest_entry, result_entry, root, result_year_entry):
+def calculate(amount_entry, length_entry, interest_entry, result_entry, root, result_year_entry, result_label_):
     # check if boxes are empty first
     if not amount_entry.get() or not length_entry.get() or not interest_entry.get():
         popup_missing()
@@ -89,6 +105,9 @@ def calculate(amount_entry, length_entry, interest_entry, result_entry, root, re
             # modyfying result to have only 2 decimals
             result = "%.2f" % result
             # print(result)
+
+            # label for result
+            result_label_.place(x=155, y=370)
 
             # write into entry box
             result_entry.insert(0, result)
@@ -128,6 +147,10 @@ def calculate(amount_entry, length_entry, interest_entry, result_entry, root, re
                                     command=lambda: forward(result_year_entry, years_label, root, 2,
                                                             list_compounded_years))
             forward_button.place(x=378, y=518)
+
+            # button for plotting
+            plotting_button = Button(root, text="Plot", font=("Helvetica", 13), fg="white", bg="#008080", command=lambda: plot(list_compounded_years, amount))
+            plotting_button.place(x=240, y=570)
 
 
 # reset all boxes with null values
@@ -177,6 +200,9 @@ def main_window():
     interest_entry = Entry(interest_lbframe, font=("Helvetica", 10))
     interest_entry.pack()
 
+    # label for result message
+    result_label_ = Label(root, text="The Compounded Sum Is:", font=("Helvetica", 13), bg="#073e4c", fg="white", justify=CENTER)
+
     # entry for result
     result_entry = Entry(root, font=("Helvetica", 14), bg="#073e4c", border=0, fg="white", justify=CENTER)
 
@@ -186,7 +212,7 @@ def main_window():
     # calculate button
     calculate_button = Button(root, text="Calculate", font=("Helvetica", 14), bg="#008080", fg="white",
                               command=lambda: calculate(amount_entry, length_entry, interest_entry, result_entry, root,
-                                                        result_year_entry))
+                                                        result_year_entry, result_label_))
     calculate_button.place(x=175, y=315)
 
     # reset button
