@@ -14,6 +14,7 @@ class GUI:
         self.interest = None
         self.result_label_ = None
         self.years_label = None
+        self.nocompound_years = None
 
         self.root.title("Compound Interest Calculator")
 
@@ -92,6 +93,7 @@ class GUI:
     def on_closing(self):
         if messagebox.askyesno(title="Quit?", message="Do you really want to quit?"):
             self.root.destroy()
+            plt.close()
 
     # define error message for missing info
     @staticmethod
@@ -127,6 +129,22 @@ class GUI:
             year_amount = self.list_compounded_years[y - 1] + (
                     (self.interest / 100) * self.list_compounded_years[y - 1])
             self.list_compounded_years.append(year_amount)
+            y += 1
+
+    # build list for another line in plot without compounding
+    def build_wo_comp(self):
+        # initialize list
+        self.nocompound_years = []
+        # add initial sum
+        self.nocompound_years.insert(0, self.amount)
+        # loop through each year's sum and append the amount to the list
+        # first element uses the initial sum formula
+        year_amount = self.amount + (self.interest / 100) * self.amount
+        self.nocompound_years.append(year_amount)
+        y = 2
+        while y < self.length + 1:
+            year_amount += (self.interest / 100) * self.amount
+            self.nocompound_years.append(year_amount)
             y += 1
 
     # calculate the result
@@ -172,6 +190,9 @@ class GUI:
                 # call the method to build the list for each year
                 self.build_list()
 
+                # call method to build uncompounded list
+                self.build_wo_comp()
+
                 # place label to inform number of years
                 self.years_label = Label(self.root, text=f"In {1} year you will have....", justify=CENTER,
                                          font=("Helvetica", 12),
@@ -190,6 +211,9 @@ class GUI:
                 self.forward_button.place(x=378, y=518)
 
                 self.plotting_button.place(x=240, y=570)
+
+                # close plot when clicking calculate with new values
+                plt.close()
 
     # define back button action
     def back(self, y):
@@ -244,6 +268,11 @@ class GUI:
         # add initial amount to the list to start from the same point
         list_compounded_years_cpy = self.list_compounded_years.copy()
         list_compounded_years_cpy.insert(0, self.amount)
+        # add initial amount to the list to start from beginning
+        #self.nocompound_years.insert(0, self.amount)
+        # plot uncompounded list
+        plt.plot(self.nocompound_years, label="Sum with no compound")
+        # plot compounded list
         plt.plot(list_compounded_years_cpy, label="Compounded sum")
         # create a list for the flat line representing initial sum through the years
         list_same_value = [self.amount for element in list_compounded_years_cpy]
