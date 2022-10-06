@@ -15,6 +15,11 @@ class GUI:
         self.result_label_ = None
         self.years_label = None
         self.nocompound_years = None
+        self.result_entry = None
+        self.result_year_entry = None
+        self.plotting_button = None
+        self.forward_button = None
+        self.back_button = None
 
         self.root.title("Compound Interest Calculator")
 
@@ -54,13 +59,6 @@ class GUI:
         self.interest_entry = Entry(self.interest_lbframe, font=("Helvetica", 10))
         self.interest_entry.pack()
 
-        # entry for result
-        self.result_entry = Entry(self.root, font=("Helvetica", 14), bg="#073e4c", border=0, fg="white", justify=CENTER)
-
-        # entry for result in each year
-        self.result_year_entry = Entry(self.root, font=("Helvetica", 13), bg="#1b4d3e", border=0, fg="white",
-                                       justify=CENTER)
-
         # calculate button
         self.calculate_button = Button(self.root, text="Calculate", font=("Helvetica", 14), bg="#008080", fg="white",
                                        command=self.calculate)
@@ -70,18 +68,6 @@ class GUI:
         self.reset_button = Button(self.root, text="Reset", font=("Helvetica", 14), bg="#ff7373", fg="white",
                                    command=self.reset)
         self.reset_button.place(x=280, y=315)
-
-        # back button to go through years
-        self.back_button = Button(self.root, text="<<", fg="white", bg="#008080",
-                                  command=lambda: self.back(2))
-
-        # forward button
-        self.forward_button = Button(self.root, text=">>", fg="white", bg="#008080",
-                                     command=lambda: self.forward(2))
-
-        # button for plotting
-        self.plotting_button = Button(self.root, text="Plot", font=("Helvetica", 13), fg="white", bg="#008080",
-                                      command=self.plot)
 
         # prompt double check when closing window
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -113,7 +99,17 @@ class GUI:
         self.result_entry.delete(0, END)
         self.result_year_entry.delete(0, END)
         self.result_label_.destroy()
+        self.result_entry.destroy()
+        self.result_year_entry.destroy()
         self.years_label.destroy()
+        # make left right buttons useless and plot
+        self.back_button = Button(self.root, text="<<", state=DISABLED, fg="white", bg="#008080")
+        self.back_button.place(x=115, y=518)
+        self.forward_button = Button(self.root, text=">>", state=DISABLED, fg="white", bg="#008080")
+        self.forward_button.place(x=378, y=518)
+        self.plotting_button = Button(self.root, text="Plot", state=DISABLED, font=("Helvetica", 13), fg="white",
+                                      bg="#008080")
+        self.plotting_button.place(x=240, y=570)
         plt.close()
 
     # def method to build the list for compounded value for each year
@@ -163,6 +159,10 @@ class GUI:
                 GUI.popup_datatype()
                 raise TypeError
             else:
+                # entry for result
+                self.result_entry = Entry(self.root, font=("Helvetica", 14), bg="#073e4c", border=0, fg="white",
+                                          justify=CENTER)
+
                 # clear result entry box (appended results otherwise)
                 self.result_entry.delete(0, END)
 
@@ -199,12 +199,29 @@ class GUI:
                                          bg="#1b4d3e", fg="white")
                 self.years_label.place(x=173, y=480)
 
+                # entry for result in each year
+                self.result_year_entry = Entry(self.root, font=("Helvetica", 13), bg="#1b4d3e", border=0, fg="white",
+                                               justify=CENTER)
+
                 # place result for year entry
                 self.result_year_entry.place(x=168, y=520)
                 # clear entry
                 self.result_year_entry.delete(0, END)
                 # place corresponding year there starting from 1 year
                 self.result_year_entry.insert(0, "%.2f" % self.list_compounded_years[0])
+
+                # buttons after calculate button
+                # back button to go through years
+                self.back_button = Button(self.root, text="<<", fg="white", bg="#008080",
+                                          command=lambda: self.back(2))
+
+                # forward button
+                self.forward_button = Button(self.root, text=">>", fg="white", bg="#008080",
+                                             command=lambda: self.forward(2))
+
+                # button for plotting
+                self.plotting_button = Button(self.root, text="Plot", font=("Helvetica", 13), fg="white", bg="#008080",
+                                              command=self.plot)
 
                 self.back_button.place(x=115, y=518)
 
@@ -218,6 +235,7 @@ class GUI:
     # define back button action
     def back(self, y):
         self.result_year_entry.delete(0, END)
+        self.years_label = Label(self.root, text="")
         self.years_label = Label(self.root, text=f"In {y} year(s) you will have", justify=CENTER,
                                  font=("Helvetica", 12),
                                  bg="#1b4d3e", fg="white")
@@ -240,6 +258,9 @@ class GUI:
 
     # define forward button action
     def forward(self, y):
+        # destroy label built by calculate button
+        if y == 2:
+            self.years_label.destroy()
         self.result_year_entry.delete(0, END)
         self.years_label = Label(self.root, text=f"In {y} year(s) you will have", justify=CENTER,
                                  font=("Helvetica", 12),
