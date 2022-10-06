@@ -268,8 +268,6 @@ class GUI:
         # add initial amount to the list to start from the same point
         list_compounded_years_cpy = self.list_compounded_years.copy()
         list_compounded_years_cpy.insert(0, self.amount)
-        # add initial amount to the list to start from beginning
-        #self.nocompound_years.insert(0, self.amount)
         # plot uncompounded list
         plt.plot(self.nocompound_years, label="Sum with no compound")
         # plot compounded list
