@@ -289,10 +289,10 @@ class GUI:
         # add initial amount to the list to start from the same point
         list_compounded_years_cpy = self.list_compounded_years.copy()
         list_compounded_years_cpy.insert(0, self.amount)
-        # plot uncompounded list
-        plt.plot(self.nocompound_years, label="Sum with no compound")
         # plot compounded list
         plt.plot(list_compounded_years_cpy, label="Compounded sum")
+        # plot uncompounded list
+        plt.plot(self.nocompound_years, label="Sum with no compound")
         # create a list for the flat line representing initial sum through the years
         list_same_value = [self.amount for element in list_compounded_years_cpy]
         plt.plot(list_same_value, label="Initial sum")
