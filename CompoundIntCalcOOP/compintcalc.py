@@ -114,6 +114,21 @@ class GUI:
         self.years_label.destroy()
         plt.close()
 
+    # def method to build the list for compounded value for each year
+    def build_list(self):
+        # declare list with the amount you will have each year
+        self.list_compounded_years = []
+        # loop through each year's sum and append the amount to the list
+        # first element uses the initial sum formula
+        year_amount = self.amount + (self.interest / 100) * self.amount
+        self.list_compounded_years.append(year_amount)
+        y = 1
+        while y < self.length:
+            year_amount = self.list_compounded_years[y - 1] + (
+                    (self.interest / 100) * self.list_compounded_years[y - 1])
+            self.list_compounded_years.append(year_amount)
+            y += 1
+
     # calculate the result
     def calculate(self):
         # check if boxes are empty first
@@ -154,19 +169,8 @@ class GUI:
                 # display entry to write the result
                 self.result_entry.place(x=145, y=400)
 
-                # declare list with the amount you will have each year
-                self.list_compounded_years = []
-                # loop through each year's sum and append the amount to the list
-                # first element uses the initial sum formula
-                year_amount = self.amount + (self.interest / 100) * self.amount
-                self.list_compounded_years.append(year_amount)
-                y = 1
-                while y < self.length:
-                    year_amount = self.list_compounded_years[y - 1] + (
-                            (self.interest / 100) * self.list_compounded_years[y - 1])
-                    self.list_compounded_years.append(year_amount)
-                    y += 1
-                y = 1
+                # call the method to build the list for each year
+                self.build_list()
 
                 # place label to inform number of years
                 self.years_label = Label(self.root, text=f"In {1} year you will have....", justify=CENTER,
@@ -179,7 +183,7 @@ class GUI:
                 # clear entry
                 self.result_year_entry.delete(0, END)
                 # place corresponding year there starting from 1 year
-                self.result_year_entry.insert(0, "%.2f" % self.list_compounded_years[y - 1])
+                self.result_year_entry.insert(0, "%.2f" % self.list_compounded_years[0])
 
                 self.back_button.place(x=115, y=518)
 
