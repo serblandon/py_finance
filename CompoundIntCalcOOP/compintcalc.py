@@ -235,7 +235,8 @@ class GUI:
     # define back button action
     def back(self, y):
         self.result_year_entry.delete(0, END)
-        self.years_label = Label(self.root, text="")
+        # destroy every label placed before this one so that it is not overwritten
+        self.years_label.destroy()
         self.years_label = Label(self.root, text=f"In {y} year(s) you will have", justify=CENTER,
                                  font=("Helvetica", 12),
                                  bg="#1b4d3e", fg="white")
@@ -258,10 +259,9 @@ class GUI:
 
     # define forward button action
     def forward(self, y):
-        # destroy label built by calculate button
-        if y == 2:
-            self.years_label.destroy()
+        # destroy label built by calculate button + every label placed before this one so that it is not overwritten
         self.result_year_entry.delete(0, END)
+        self.years_label.destroy()
         self.years_label = Label(self.root, text=f"In {y} year(s) you will have", justify=CENTER,
                                  font=("Helvetica", 12),
                                  bg="#1b4d3e", fg="white")
